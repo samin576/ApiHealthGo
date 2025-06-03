@@ -7,6 +7,7 @@ using MyFirstCRUD.infrastructure;
 using MyFirstCRUD.Repository;
 using MySql.Data.MySqlClient;
 using Mysqlx.Crud;
+using ZstdSharp.Unsafe;
 namespace MyFirstCRUD
 {
     internal class Program
@@ -17,7 +18,7 @@ namespace MyFirstCRUD
 
             do
             {
-                Console.WriteLine("1-Nação 2-Especialidade:");
+                Console.WriteLine("1-Nação 2-Especialidade 3 -Estado:");
                 int resposta = int.Parse(Console.ReadLine());
                 if (resposta == 1)
                 {
@@ -68,6 +69,33 @@ namespace MyFirstCRUD
                             break;
                         case 'D':
                             await DeleteEspecialidade();
+                            break;
+                    }
+                }
+                else if (resposta == 3)
+                {
+                    Console.WriteLine("-- Cadastro de Estado --");
+                    Console.WriteLine("C - CREATE");
+                    Console.WriteLine("R - READ");
+                    Console.WriteLine("U - UPDATE");
+                    Console.WriteLine("D - DELETE\n");
+                    Console.WriteLine("S - SAIR");
+
+                    op = Console.ReadLine().ToUpper()[0];
+
+                    switch (op)
+                    {
+                        case 'C':
+                            await CreateEstado();
+                            break;
+                        case 'R':
+                            await ReadEstado();
+                            break;
+                        case 'U':
+                            await UpdateEstado();
+                            break;
+                        case 'D':
+                            await DeleteEstado();
                             break;
                     }
                 }
@@ -160,7 +188,7 @@ namespace MyFirstCRUD
             int id = int.Parse(Console.ReadLine());
             INacaoRepository nacaoRepository = new NacaoRepository();
             await nacaoRepository.Delete(id);
-            Console.WriteLine("Nação cadastrada com sucesso");
+            Console.WriteLine("Nação deletada com sucesso");
         }
         static async Task UpdateNacao()
         {
@@ -177,6 +205,69 @@ namespace MyFirstCRUD
                 await nacaoRepository.Update(nacao);
                 Console.WriteLine("Nação alterada com sucesso!");
             }
+        }
+
+        //ESTADO
+
+        static async Task ReadEstado()
+        {
+            IEstadoRepository estadoRepository = new EstadoRepository();
+            IEnumerable<EstadoEntity> stateList = await estadoRepository.GetAll();
+            foreach (var state in stateList)
+            {
+                Console.WriteLine($"Id: {state.Id}");
+                Console.WriteLine($"Nome: {state.Nome}");
+            }
+        }
+
+        static async Task CreateEstado()
+        {
+            EstadoInsertDTO estado = new EstadoInsertDTO();
+
+            Console.WriteLine("Digite o nome:");
+            estado.Nome = Console.ReadLine();
+            Console.WriteLine("Digite a sigla:");
+            estado.Sigla = Console.ReadLine();
+            //Como colocar nação nos estados?
+            IEstadoRepository estadoRepository = new EstadoRepository();
+            await estadoRepository.Insert(estado);
+            Console.WriteLine("Estado cadastrado com sucesso!");
+        }
+
+        static async Task DeleteEstado()
+        {
+            await ReadEstado();
+            Console.WriteLine("Digite o Id que quer deletar");
+            int id = int.Parse(Console.ReadLine());
+            IEstadoRepository estadoRepository = new EstadoRepository();
+            await estadoRepository.Delete(id);
+            Console.WriteLine("Estado deletado com sucesso");
+        }
+        static async Task UpdateEstado()
+        {
+            await ReadEstado();
+            Console.WriteLine("Digite o Id que quer alterar");
+            int id = int.Parse(Console.ReadLine());
+            IEstadoRepository estadoRepository = new EstadoRepository();
+            EstadoEntity estado = await estadoRepository.GetById(id);
+            Console.WriteLine($"Digite um novo nome para {estado.Nome} ou aperte enter para deixar assim");
+            string newName = Console.ReadLine();
+            if(newName != string.Empty)
+            {
+                estado.Nome = newName;
+            }
+            Console.WriteLine($"Digite uma nova sigla para {estado.Nome} ou aperte enter para deixar assim");
+            char newSigla = char.Parse(Console.ReadLine());
+            if ( newSigla != '\0')
+            {
+                estado.Sigla = newSigla;
+               
+            }
+            if(newName != string.Empty || newSigla != '\0'){
+                await estadoRepository.Update(estado);
+                Console.WriteLine("Alterações feitas com sucesso!");
+            }
+
         }
     }
 }
