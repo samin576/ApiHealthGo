@@ -8,7 +8,7 @@ namespace MyFirstCRUD.entity
 {
     class EspecialidadeEntity
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string Nome {  get; set; }
     }
 }

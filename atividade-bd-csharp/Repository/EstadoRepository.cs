@@ -20,9 +20,10 @@ namespace MyFirstCRUD.Repository
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = $@"
-                    SELECT ID AS {nameof(EstadoEntity.Id)},
-                           NOME AS {nameof(EstadoEntity.Nome)}
-                           SIGLA AS {nameof(EstadoEntity.Sigla)}
+                    SELECT Id AS {nameof(EstadoEntity.id)},
+                           Nome AS {nameof(EstadoEntity.Nome)},
+                           Sigla AS {nameof(EstadoEntity.Sigla)},
+                          NACAO_ID AS {nameof(EstadoEntity.Nacao_id)}
                       FROM ESTADO
                 ";
 
@@ -36,8 +37,8 @@ namespace MyFirstCRUD.Repository
         {
             Connection _connection = new Connection();
             string sql = @"
-                INSERT INTO ESTADO (NOME,SIGLA)
-                                VALUE (@Nome,@Sigla)
+                INSERT INTO ESTADO (NOME,SIGLA,NACAO_ID)
+                                VALUES (@Nome,@SIGLA,@NACAO_ID)
                 ";
 
             await _connection.Execute(sql, estado);
@@ -57,28 +58,31 @@ namespace MyFirstCRUD.Repository
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = $@"
-                    SELECT ID AS {nameof(EstadoEntity.Id)},
-                           NOME AS {nameof(EstadoEntity.Nome)}
-                          SIGLA AS {nameof(EstadoEntity.Sigla)}
-                      FROM Estado
-                      Where ID = @id
+                    SELECT Id AS {nameof(EstadoEntity.id)},
+                           Nome AS {nameof(EstadoEntity.Nome)},
+                           Sigla AS {nameof(EstadoEntity.Sigla)},
+                          NACAO_ID AS {nameof(EstadoEntity.Nacao_id)}
+                           FROM ESTADO
+                             Where ID = @id
                 ";
 
-                EstadoEntity Estado = await con.QueryFirstAsync<EstadoEntity>(sql, new { id });
-                return Estado;
+                EstadoEntity estado = await con.QueryFirstAsync<EstadoEntity>(sql, new { id });
+                return estado;
             }
         }
 
-        public async Task Update(EstadoEntity Estado)
+        public async Task Update(EstadoEntity estado)
         {
             Connection _connection = new Connection();
-            string sql = @"UPDATE Estado
-                              SET NOME = @Nome
-                              SET SIGLA = @Sigla
-                              WHERE ID = @Id
+            string sql = @"UPDATE ESTADO
+                           SET 
+                          NOME = @Nome,
+                         SIGLA = @Sigla,
+                      NACAO_ID = @Nacao_Id,
+                      WHERE ID = @Id;
             ";
 
-            await _connection.Execute(sql, Estado);
+            await _connection.Execute(sql, estado);
         }
     }
 }

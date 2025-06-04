@@ -111,7 +111,7 @@ namespace MyFirstCRUD
             IEnumerable<EspecialidadeEntity> especialidadeList = await especialidadeRepository.GetAll();
             foreach (EspecialidadeEntity especialidade in especialidadeList)
             {
-                Console.WriteLine($"Id: {especialidade.Id}");
+                Console.WriteLine($"Id: {especialidade.id}");
                 Console.WriteLine($"Nome: {especialidade.Nome}\n");
             }
 
@@ -165,7 +165,7 @@ namespace MyFirstCRUD
             IEnumerable<NacaoEntity> nacaoList = await nacaoRepository.GetAll();
             foreach (var nation in nacaoList)
             {
-                Console.WriteLine($"Id: {nation.Id}");
+                Console.WriteLine($"Id: {nation.id}");
                 Console.WriteLine($"Nome: {nation.Nome}");
             }
         }
@@ -212,11 +212,13 @@ namespace MyFirstCRUD
         static async Task ReadEstado()
         {
             IEstadoRepository estadoRepository = new EstadoRepository();
-            IEnumerable<EstadoEntity> stateList = await estadoRepository.GetAll();
-            foreach (var state in stateList)
+            IEnumerable<EstadoEntity> estadoList = await estadoRepository.GetAll();
+            foreach (var state in estadoList)
             {
-                Console.WriteLine($"Id: {state.Id}");
+                Console.WriteLine($"Id: {state.id}");
                 Console.WriteLine($"Nome: {state.Nome}");
+                Console.WriteLine($"Sigla: {state.Sigla}");
+                Console.WriteLine($"Nação_id: {state.Nacao_id}\n");
             }
         }
 
@@ -228,7 +230,8 @@ namespace MyFirstCRUD
             estado.Nome = Console.ReadLine();
             Console.WriteLine("Digite a sigla:");
             estado.Sigla = Console.ReadLine();
-            //Como colocar nação nos estados?
+            Console.WriteLine("Digite o id da Nação:");
+            estado.Nacao_id = int.Parse(Console.ReadLine());
             IEstadoRepository estadoRepository = new EstadoRepository();
             await estadoRepository.Insert(estado);
             Console.WriteLine("Estado cadastrado com sucesso!");
@@ -246,28 +249,27 @@ namespace MyFirstCRUD
         static async Task UpdateEstado()
         {
             await ReadEstado();
-            Console.WriteLine("Digite o Id que quer alterar");
+            Console.WriteLine("Digite o Id que quer alterar:");
             int id = int.Parse(Console.ReadLine());
             IEstadoRepository estadoRepository = new EstadoRepository();
             EstadoEntity estado = await estadoRepository.GetById(id);
             Console.WriteLine($"Digite um novo nome para {estado.Nome} ou aperte enter para deixar assim");
             string newName = Console.ReadLine();
-            if(newName != string.Empty)
+            Console.WriteLine($"Digite uma nova sigla para {estado.Nome} ou aperte enter para deixar assim");
+            string newSigla = Console.ReadLine();
+            if (newName != string.Empty)
             {
                 estado.Nome = newName;
+                await estadoRepository.Update(estado);
             }
-            Console.WriteLine($"Digite uma nova sigla para {estado.Nome} ou aperte enter para deixar assim");
-            char newSigla = char.Parse(Console.ReadLine());
-            if ( newSigla != '\0')
+            if (newSigla != string.Empty)
             {
                 estado.Sigla = newSigla;
-               
-            }
-            if(newName != string.Empty || newSigla != '\0'){
                 await estadoRepository.Update(estado);
-                Console.WriteLine("Alterações feitas com sucesso!");
             }
-
+            Console.WriteLine("Estado alterado com sucesso!");
         }
+
+
     }
 }

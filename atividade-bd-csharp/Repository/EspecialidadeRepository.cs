@@ -20,7 +20,7 @@ namespace MyFirstCRUD.Repository
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = $@"
-                    SELECT ID AS {nameof(EspecialidadeEntity.Id)},
+                    SELECT ID AS {nameof(EspecialidadeEntity.id)},
                            NOME AS {nameof(EspecialidadeEntity.Nome)}
                       FROM ESPECIALIDADE
                 ";
@@ -36,7 +36,7 @@ namespace MyFirstCRUD.Repository
             Connection _connection = new Connection();
             string sql = @"
                 INSERT INTO ESPECIALIDADE (NOME)
-                                VALUE (@Nome)
+                                VALUES (@Nome)
                 ";
 
             await _connection.Execute(sql, especialidade);
@@ -56,7 +56,7 @@ namespace MyFirstCRUD.Repository
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = $@"
-                    SELECT ID AS {nameof(EspecialidadeEntity.Id)},
+                    SELECT ID AS {nameof(EspecialidadeEntity.id)},
                            NOME AS {nameof(EspecialidadeEntity.Nome)}
                       FROM ESPECIALIDADE
                       Where ID = @id

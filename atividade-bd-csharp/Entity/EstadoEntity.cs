@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace MyFirstCRUD.entity
 {
-    class EstadoEntity:NacaoEntity
+    class EstadoEntity
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string Nome { get; set; }
-        public char Sigla {  get; set; }
-
-
+        public string Sigla { get; set; }
+        public int Nacao_id { get; set; }
     }
 }

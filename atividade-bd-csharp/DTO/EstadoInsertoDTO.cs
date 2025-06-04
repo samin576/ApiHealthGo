@@ -1,5 +1,4 @@
-﻿using MyFirstCRUD.entity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +10,7 @@ namespace MyFirstCRUD.DTO
     {
         public string Nome { get; set; }
         public string Sigla { get; set; }
+        public int Nacao_id { get; set; }
 
     }
 }
