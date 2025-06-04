@@ -18,8 +18,9 @@ namespace MyFirstCRUD
 
             do
             {
-                Console.WriteLine("1-Nação 2-Especialidade 3 -Estado:");
+                Console.WriteLine("1-Nação 2-Especialidade 3-Estado 4-Cidade:");
                 int resposta = int.Parse(Console.ReadLine());
+                // Fazer um switch aqui
                 if (resposta == 1)
                 {
                     Console.WriteLine("-- Cadastro de país --");
@@ -99,10 +100,41 @@ namespace MyFirstCRUD
                             break;
                     }
                 }
-                Console.WriteLine("Pressione 'Enter' para continuar.");
-                Console.ReadLine();
-                Console.Clear();
+                else if (resposta == 4)
+                {
+                    Console.WriteLine("-- Cadastro de Cidade --");
+                    Console.WriteLine("C - CREATE");
+                    Console.WriteLine("R - READ");
+                    Console.WriteLine("U - UPDATE");
+                    Console.WriteLine("D - DELETE\n");
+                    Console.WriteLine("S - SAIR");
+
+                    op = Console.ReadLine().ToUpper()[0];
+
+                    switch (op)
+                    {
+                        case 'C':
+                            await CreateCidade();
+                            break;
+                        case 'R':
+                            await ReadCidade();
+                            break;
+                        case 'U':
+                            await UpdateCidade();
+                            break;
+                        case 'D':
+                            await DeleteCidade();
+                            break;
+                    }
+                }
+                if (op != 'S')
+                {
+                    Console.WriteLine("Pressione 'Enter' para continuar.");
+                    Console.ReadLine();
+                    Console.Clear();
+                }
             } while (op != 'S');
+            Console.WriteLine("Tchau!");
         }
         //ESPECIALIDADE
         static async Task ReadEspecialidade()
@@ -155,6 +187,7 @@ namespace MyFirstCRUD
             if (newName != string.Empty)
             {
                 especialidade.Nome = newName;
+                await especialidadeRepository.Update(especialidade);
                 Console.WriteLine("Nome alterado com sucesso.");
             }
         }
@@ -249,27 +282,89 @@ namespace MyFirstCRUD
         static async Task UpdateEstado()
         {
             await ReadEstado();
-            Console.WriteLine("Digite o Id que quer alterar:");
+            Console.WriteLine("Digite o Id que quer alterar");
             int id = int.Parse(Console.ReadLine());
             IEstadoRepository estadoRepository = new EstadoRepository();
             EstadoEntity estado = await estadoRepository.GetById(id);
             Console.WriteLine($"Digite um novo nome para {estado.Nome} ou aperte enter para deixar assim");
             string newName = Console.ReadLine();
-            Console.WriteLine($"Digite uma nova sigla para {estado.Nome} ou aperte enter para deixar assim");
+            Console.WriteLine($"Digite uma nova sigla para {estado.Nome} ou aperte enter para deixar");
             string newSigla = Console.ReadLine();
+            Console.WriteLine($"Digite o id da nova nação para {estado.Nome} ou aperto enter para deixar");
+            int newNation = int.Parse(Console.ReadLine());
             if (newName != string.Empty)
             {
                 estado.Nome = newName;
-                await estadoRepository.Update(estado);
             }
             if (newSigla != string.Empty)
             {
                 estado.Sigla = newSigla;
-                await estadoRepository.Update(estado);
             }
-            Console.WriteLine("Estado alterado com sucesso!");
+            if (newNation != null)
+            {
+                estado.Nacao_id = newNation;
+            }
+            await estadoRepository.Update(estado);
+            Console.WriteLine("Alterações feitas com sucesso!");
         }
 
+        // CIDADE
 
+        static async Task ReadCidade()
+        {
+            ICidadeRepository cidadeRepository = new CidadeRepository();
+            IEnumerable<CidadeEntity> cidadeList = await cidadeRepository.GetAll();
+            foreach (var cidade in cidadeList)
+            {
+                Console.WriteLine($"Id: {cidade.id}");
+                Console.WriteLine($"Nome: {cidade.Nome}");
+                Console.WriteLine($"Estado_id: {cidade.Estado_id}\n");
+            }
+        }
+
+        static async Task CreateCidade()
+        {
+            CidadeInsertDTO cidade = new CidadeInsertDTO();
+
+            Console.WriteLine("Digite o nome:");
+            cidade.Nome = Console.ReadLine();
+            Console.WriteLine("Digite o id do estado:");
+            cidade.Estado_id = int.Parse(Console.ReadLine());
+            ICidadeRepository cidadeRepository = new CidadeRepository();
+            await cidadeRepository.Insert(cidade);
+            Console.WriteLine("Cidade cadastrada com sucesso!");
+        }
+
+        static async Task DeleteCidade()
+        {
+            await ReadCidade();
+            Console.WriteLine("Digite o Id que quer deletar");
+            int id = int.Parse(Console.ReadLine());
+            ICidadeRepository cidadeRepository = new CidadeRepository();
+            await cidadeRepository.Delete(id);
+            Console.WriteLine("Cidade deletado com sucesso");
+        }
+        static async Task UpdateCidade()
+        {
+            await ReadCidade();
+            Console.WriteLine("Digite o Id que quer alterar");
+            int id = int.Parse(Console.ReadLine());
+            ICidadeRepository cidadeRepository = new CidadeRepository();
+            CidadeEntity cidade = await cidadeRepository.GetById(id);
+            Console.WriteLine($"Digite um novo nome para {cidade.Nome} ou aperte enter para deixar assim");
+            string newName = Console.ReadLine();
+            Console.WriteLine($"Digite o id do novo estado para {cidade.Nome} ou aperto enter para deixar");
+            int newCity = int.Parse(Console.ReadLine());
+            if (newName != string.Empty)
+            {
+                cidade.Nome = newName;
+            }
+            if (newCity != null)
+            {
+                cidade.Estado_id = newCity;
+            }
+            await cidadeRepository.Update(cidade);
+            Console.WriteLine("Alterações feitas com sucesso!");
+        }
     }
 }

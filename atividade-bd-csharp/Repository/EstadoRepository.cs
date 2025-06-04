@@ -62,8 +62,8 @@ namespace MyFirstCRUD.Repository
                            Nome AS {nameof(EstadoEntity.Nome)},
                            Sigla AS {nameof(EstadoEntity.Sigla)},
                           NACAO_ID AS {nameof(EstadoEntity.Nacao_id)}
-                           FROM ESTADO
-                             Where ID = @id
+                      FROM ESTADO
+                   WHERE ID = @Id;
                 ";
 
                 EstadoEntity estado = await con.QueryFirstAsync<EstadoEntity>(sql, new { id });
@@ -74,13 +74,13 @@ namespace MyFirstCRUD.Repository
         public async Task Update(EstadoEntity estado)
         {
             Connection _connection = new Connection();
-            string sql = @"UPDATE ESTADO
-                           SET 
-                          NOME = @Nome,
-                         SIGLA = @Sigla,
-                      NACAO_ID = @Nacao_Id,
-                      WHERE ID = @Id;
-            ";
+            string sql = @"
+                          UPDATE ESTADO
+                               SET NOME = @Nome,
+                                  SIGLA = @Sigla,
+                               NACAO_ID = @Nacao_id
+                               WHERE ID = @Id;
+    ";
 
             await _connection.Execute(sql, estado);
         }
