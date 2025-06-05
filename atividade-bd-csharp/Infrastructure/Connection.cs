@@ -11,8 +11,7 @@ namespace MyFirstCRUD.infrastructure
 {
     public class Connection
     {
-        //protected string connectionString = "Server=localhost;Database=healthgo;User=root;Password=root;";
-        protected string connectionString = "Server=localhost;Database=HealthGo;User=root;Password=Nade2749;";
+        protected string connectionString = "Server=localhost;Database=healthgo;User=root;Password=root;";
 
         public MySqlConnection GetConnection()
         {

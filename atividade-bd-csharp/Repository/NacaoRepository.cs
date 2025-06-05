@@ -32,7 +32,7 @@ namespace MyFirstCRUD.Repository
         {
             Connection _connection = new Connection();
             string sql = @$"
-                 INSERT INTO Nacao (Nome)
+                 INSERT INTO Nacao ( Nome)
                               VALUES(@Nome)                                                           
             ";
             await _connection.Execute(sql, nacao);

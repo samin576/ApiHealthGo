@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyFirstCRUD.entity
+namespace MyFirstCRUD.DTO
 {
-    class EspecialidadeEntity
+    public class AeroportoInsertDTO
     {
-        public int id { get; set; }
         public string Nome { get; set; }
+        public string CodigoIata { get; set; }
+        public int Cidade_id { get; set; }
+
     }
 }

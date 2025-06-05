@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Globalization;
+using System.Threading.Tasks;
 using Dapper;
+using Google.Protobuf.WellKnownTypes;
 using MyFirstCRUD.Contracts.Repository;
 using MyFirstCRUD.DTO;
 using MyFirstCRUD.entity;
@@ -15,132 +17,181 @@ namespace MyFirstCRUD
         static async Task Main(string[] args)
         {
             char op = '0';
-
-            do
+            try
             {
-                Console.WriteLine("1-Nação 2-Especialidade 3-Estado 4-Cidade:");
-                int resposta = int.Parse(Console.ReadLine());
-                // Fazer um switch aqui
-                if (resposta == 1)
+                do
                 {
-                    Console.WriteLine("-- Cadastro de país --");
-                    Console.WriteLine("C-CREATE");
-                    Console.WriteLine("R-READ");
-                    Console.WriteLine("U-UPDATE");
-                    Console.WriteLine("D-DELETE\n");
-                    Console.WriteLine("S-SAIR");
-                    op = Console.ReadLine().ToUpper()[0];
-                    switch (op)
+                    Console.WriteLine("1-Nação 2-Especialidade 3-Estado 4-Cidade 5-Aeroporto:");
+                    int resposta = int.Parse(Console.ReadLine());
+                    switch (resposta)
                     {
-                        case 'C':
-                            await CreateNacao();
+                        case 1:
+                            Console.WriteLine("-- Cadastro de país --");
+                            Console.WriteLine("C-CREATE");
+                            Console.WriteLine("R-READ");
+                            Console.WriteLine("U-UPDATE");
+                            Console.WriteLine("D-DELETE\n");
+                            Console.WriteLine("S-SAIR");
+                            op = Console.ReadLine().ToUpper()[0];
+                            switch (op)
+                            {
+                                case 'C':
+                                    await CreateNacao();
+                                    break;
+                                case 'R':
+                                    await ReadNacao();
+                                    break;
+                                case 'U':
+                                    await UpdateNacao();
+                                    break;
+                                case 'D':
+                                    await DeleteNacao();
+                                    break;
+                                default:
+                                    Console.WriteLine("Opção inválida!");
+                                    break;
+                            }
                             break;
-                        case 'R':
-                            await ReadNacao();
+                        case 2:
+                            Console.WriteLine("-- Cadastro de Especialidade --");
+                            Console.WriteLine("C - CREATE");
+                            Console.WriteLine("R - READ");
+                            Console.WriteLine("U - UPDATE");
+                            Console.WriteLine("D - DELETE\n");
+                            Console.WriteLine("S - SAIR");
+
+                            op = Console.ReadLine().ToUpper()[0];
+
+                            switch (op)
+                            {
+                                case 'C':
+                                    await CreateEspecialidade();
+                                    break;
+                                case 'R':
+                                    await ReadEspecialidade();
+                                    break;
+                                case 'U':
+                                    await UpdateEspecialidade();
+                                    break;
+                                case 'D':
+                                    await DeleteEspecialidade();
+                                    break;
+                                default:
+                                    Console.WriteLine("Opção inválida!");
+                                    break;
+                            }
                             break;
-                        case 'U':
-                            await UpdateNacao();
+                        case 3:
+                            Console.WriteLine("-- Cadastro de Estado --");
+                            Console.WriteLine("C - CREATE");
+                            Console.WriteLine("R - READ");
+                            Console.WriteLine("U - UPDATE");
+                            Console.WriteLine("D - DELETE\n");
+                            Console.WriteLine("S - SAIR");
+
+                            op = Console.ReadLine().ToUpper()[0];
+
+                            switch (op)
+                            {
+                                case 'C':
+                                    await CreateEstado();
+                                    break;
+                                case 'R':
+                                    await ReadEstado();
+                                    break;
+                                case 'U':
+                                    await UpdateEstado();
+                                    break;
+                                case 'D':
+                                    await DeleteEstado();
+                                    break;
+                                default:
+                                    Console.WriteLine("Opção inválida!");
+                                    break;
+                            }
                             break;
-                        case 'D':
-                            await DeleteNacao();
+                        case 4:
+                            Console.WriteLine("-- Cadastro de Cidade --");
+                            Console.WriteLine("C - CREATE");
+                            Console.WriteLine("R - READ");
+                            Console.WriteLine("U - UPDATE");
+                            Console.WriteLine("D - DELETE\n");
+                            Console.WriteLine("S - SAIR");
+
+                            op = Console.ReadLine().ToUpper()[0];
+
+                            switch (op)
+                            {
+                                case 'C':
+                                    await CreateCidade();
+                                    break;
+                                case 'R':
+                                    await ReadCidade();
+                                    break;
+                                case 'U':
+                                    await UpdateCidade();
+                                    break;
+                                case 'D':
+                                    await DeleteCidade();
+                                    break;
+                                default:
+                                    Console.WriteLine("Opção inválida!");
+                                    break;
+                            }
+                            break;
+                        case 5:
+                            Console.WriteLine("-- Cadastro de Aeroporto --");
+                            Console.WriteLine("C - CREATE");
+                            Console.WriteLine("R - READ");
+                            Console.WriteLine("U - UPDATE");
+                            Console.WriteLine("D - DELETE\n");
+                            Console.WriteLine("S - SAIR");
+
+                            op = Console.ReadLine().ToUpper()[0];
+
+                            switch (op)
+                            {
+                                case 'C':
+                                    await CreateAeroporto();
+                                    break;
+                                case 'R':
+                                    await ReadAeroporto();
+                                    break;
+                                case 'U':
+                                    await UpdateAeroporto();
+                                    break;
+                                case 'D':
+                                    await DeleteAeroporto();
+                                    break;
+                                default:
+                                    Console.WriteLine("Opção inválida!");
+                                    break;
+                            }
+                            break;
+                        default:
+                            Console.WriteLine("Opção inválida!");
                             break;
                     }
-                }
-                else if (resposta == 2)
-                {
-                    Console.WriteLine("-- Cadastro de Especialidade --");
-                    Console.WriteLine("C - CREATE");
-                    Console.WriteLine("R - READ");
-                    Console.WriteLine("U - UPDATE");
-                    Console.WriteLine("D - DELETE\n");
-                    Console.WriteLine("S - SAIR");
-
-                    op = Console.ReadLine().ToUpper()[0];
-
-                    switch (op)
+                    if (op != 'S')
                     {
-                        case 'C':
-                            await CreateEspecialidade();
-                            break;
-                        case 'R':
-                            await ReadEspecialidade();
-                            break;
-                        case 'U':
-                            await UpdateEspecialidade();
-                            break;
-                        case 'D':
-                            await DeleteEspecialidade();
-                            break;
+                        Console.WriteLine("Pressione 'Enter' para continuar.");
+                        Console.ReadLine();
+                        Console.Clear();
                     }
-                }
-                else if (resposta == 3)
-                {
-                    Console.WriteLine("-- Cadastro de Estado --");
-                    Console.WriteLine("C - CREATE");
-                    Console.WriteLine("R - READ");
-                    Console.WriteLine("U - UPDATE");
-                    Console.WriteLine("D - DELETE\n");
-                    Console.WriteLine("S - SAIR");
-
-                    op = Console.ReadLine().ToUpper()[0];
-
-                    switch (op)
-                    {
-                        case 'C':
-                            await CreateEstado();
-                            break;
-                        case 'R':
-                            await ReadEstado();
-                            break;
-                        case 'U':
-                            await UpdateEstado();
-                            break;
-                        case 'D':
-                            await DeleteEstado();
-                            break;
-                    }
-                }
-                else if (resposta == 4)
-                {
-                    Console.WriteLine("-- Cadastro de Cidade --");
-                    Console.WriteLine("C - CREATE");
-                    Console.WriteLine("R - READ");
-                    Console.WriteLine("U - UPDATE");
-                    Console.WriteLine("D - DELETE\n");
-                    Console.WriteLine("S - SAIR");
-
-                    op = Console.ReadLine().ToUpper()[0];
-
-                    switch (op)
-                    {
-                        case 'C':
-                            await CreateCidade();
-                            break;
-                        case 'R':
-                            await ReadCidade();
-                            break;
-                        case 'U':
-                            await UpdateCidade();
-                            break;
-                        case 'D':
-                            await DeleteCidade();
-                            break;
-                    }
-                }
-                if (op != 'S')
-                {
-                    Console.WriteLine("Pressione 'Enter' para continuar.");
-                    Console.ReadLine();
-                    Console.Clear();
-                }
-            } while (op != 'S');
-            Console.WriteLine("Tchau!");
+                } while (op != 'S');
+                Console.WriteLine("Tchau!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ops, algo deu errado! {ex.Message}");
+            }
         }
         //ESPECIALIDADE
         static async Task ReadEspecialidade()
         {
             IEspecialidadeRepository especialidadeRepository = new EspecialidadeRepository();
             IEnumerable<EspecialidadeEntity> especialidadeList = await especialidadeRepository.GetAll();
+
             foreach (EspecialidadeEntity especialidade in especialidadeList)
             {
                 Console.WriteLine($"Id: {especialidade.id}");
@@ -148,28 +199,25 @@ namespace MyFirstCRUD
             }
 
         }
-
         static async Task CreateEspecialidade()
         {
             EspecialidadeInsertDTO especialidade = new EspecialidadeInsertDTO();
 
-            Console.WriteLine("Digite o nome da Especialidade: ");
+            Console.WriteLine("Digite o nome da Especialidade:");
             especialidade.Nome = Console.ReadLine();
 
             IEspecialidadeRepository especialidadeRepository = new EspecialidadeRepository();
             await especialidadeRepository.Insert(especialidade);
             Console.WriteLine("Especialidade cadastrada com sucesso.");
-        }
 
+        }
         static async Task DeleteEspecialidade()
         {
             await ReadEspecialidade();
             Console.WriteLine("Digite o Id que deseja excluir: ");
             int id = int.Parse(Console.ReadLine());
-
             IEspecialidadeRepository especialidadeRepository = new EspecialidadeRepository();
             await especialidadeRepository.Delete(id);
-
             Console.WriteLine("Especialidade deletada com sucesso.");
         }
 
@@ -178,17 +226,19 @@ namespace MyFirstCRUD
             await ReadEspecialidade();
             Console.WriteLine("Digite o Id que deseja alterar: ");
             int id = int.Parse(Console.ReadLine());
-
             IEspecialidadeRepository especialidadeRepository = new EspecialidadeRepository();
             EspecialidadeEntity especialidade = await especialidadeRepository.GetById(id);
             Console.WriteLine($"Digite um novo nome para {especialidade.Nome} ou aperte 'Enter' para manter: ");
-
             string newName = Console.ReadLine();
-            if (newName != string.Empty)
+            if (!string.IsNullOrEmpty(newName))
             {
                 especialidade.Nome = newName;
                 await especialidadeRepository.Update(especialidade);
                 Console.WriteLine("Nome alterado com sucesso.");
+            }
+            else
+            {
+                Console.WriteLine("Você não digitou nada");
             }
         }
         //NACAO
@@ -201,6 +251,7 @@ namespace MyFirstCRUD
                 Console.WriteLine($"Id: {nation.id}");
                 Console.WriteLine($"Nome: {nation.Nome}");
             }
+
         }
 
         static async Task CreateNacao()
@@ -232,7 +283,7 @@ namespace MyFirstCRUD
             NacaoEntity nacao = await nacaoRepository.GetById(id);
             Console.WriteLine($"Digite um novo nome para {nacao.Nome} ou aperte enter para deixar assim");
             string newName = Console.ReadLine();
-            if (newName != string.Empty)
+            if (!string.IsNullOrEmpty(newName))
             {
                 nacao.Nome = newName;
                 await nacaoRepository.Update(nacao);
@@ -253,6 +304,7 @@ namespace MyFirstCRUD
                 Console.WriteLine($"Sigla: {state.Sigla}");
                 Console.WriteLine($"Nação_id: {state.Nacao_id}\n");
             }
+
         }
 
         static async Task CreateEstado()
@@ -354,16 +406,84 @@ namespace MyFirstCRUD
             Console.WriteLine($"Digite um novo nome para {cidade.Nome} ou aperte enter para deixar assim");
             string newName = Console.ReadLine();
             Console.WriteLine($"Digite o id do novo estado para {cidade.Nome} ou aperto enter para deixar");
-            int newCity = int.Parse(Console.ReadLine());
+            int newState = int.Parse(Console.ReadLine());
             if (newName != string.Empty)
             {
                 cidade.Nome = newName;
             }
-            if (newCity != null)
+            if (newState != null)
             {
-                cidade.Estado_id = newCity;
+                cidade.Estado_id = newState;
             }
             await cidadeRepository.Update(cidade);
+            Console.WriteLine("Alterações feitas com sucesso!");
+        }
+
+        //AEROPORTO
+
+        static async Task ReadAeroporto()
+        {
+            IAeroportoRepository aeroportoRepository = new AeroportoRepository();
+            IEnumerable<AeroportoEntity> aeroportoList = await aeroportoRepository.GetAll();
+            foreach (var aeroporto in aeroportoList)
+            {
+                Console.WriteLine($"Id: {aeroporto.id}");
+                Console.WriteLine($"Nome: {aeroporto.Nome}");
+                Console.WriteLine($"CódigoIata: {aeroporto.CodigoIata}");
+                Console.WriteLine($"Cidade_id: {aeroporto.Cidade_id}\n");
+            }
+        }
+
+        static async Task CreateAeroporto()
+        {
+            AeroportoInsertDTO aeroporto = new AeroportoInsertDTO();
+
+            Console.WriteLine("Digite o nome:");
+            aeroporto.Nome = Console.ReadLine();
+            Console.WriteLine("Digite o códigoIata:");
+            aeroporto.CodigoIata = Console.ReadLine();
+            Console.WriteLine("Digite o id da cidade:");
+            aeroporto.Cidade_id = int.Parse(Console.ReadLine());
+            IAeroportoRepository aeroportoRepository = new AeroportoRepository();
+            await aeroportoRepository.Insert(aeroporto);
+            Console.WriteLine("Aeroporto cadastrada com sucesso!");
+        }
+
+        static async Task DeleteAeroporto()
+        {
+            await ReadAeroporto();
+            Console.WriteLine("Digite o Id que quer deletar");
+            int id = int.Parse(Console.ReadLine());
+            IAeroportoRepository aeroportoRepository = new AeroportoRepository();
+            await aeroportoRepository.Delete(id);
+            Console.WriteLine("Aeroporto deletado com sucesso");
+        }
+        static async Task UpdateAeroporto()
+        {
+            await ReadAeroporto();
+            Console.WriteLine("Digite o Id que quer alterar");
+            int id = int.Parse(Console.ReadLine());
+            IAeroportoRepository aeroportoRepository = new AeroportoRepository();
+            AeroportoEntity aeroporto = await aeroportoRepository.GetById(id);
+            Console.WriteLine($"Digite um novo nome para {aeroporto.Nome} ou aperte enter para deixar assim");
+            string newName = Console.ReadLine();
+            Console.WriteLine($"Digite um novo código Iata para {aeroporto.Nome} ou aperte enter para deixar assim");
+            string newIata = Console.ReadLine();
+            Console.WriteLine($"Digite o id da nova cidade para {aeroporto.Nome} ou aperte enter para deixar");
+            int newCity = int.Parse(Console.ReadLine());
+            if (newName != string.Empty)
+            {
+                aeroporto.Nome = newName;
+            }
+            if (newIata != string.Empty)
+            {
+                aeroporto.CodigoIata = newIata;
+            }
+            if (newCity != null)
+            {
+                aeroporto.Cidade_id = newCity;
+            }
+            await aeroportoRepository.Update(aeroporto);
             Console.WriteLine("Alterações feitas com sucesso!");
         }
     }
