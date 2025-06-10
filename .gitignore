@@ -8,7 +8,7 @@
 bin/
 obj/
 
-# Outros arquivos desnecessários
+# Other unnecessary files
 *.log
 *.tmp
 *.DS_Store

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MinhaPrimeiraApi.entity
+namespace MinhaPrimeiraApi.Entity
 {
-    class AeroportoEntity
+    public class AeroportoEntity
     {
         public int id { get; set; }
         public string Nome { get; set; }

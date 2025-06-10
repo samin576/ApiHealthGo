@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MinhaPrimeiraApi.Contracts.Repository;
 using Dapper;
 using MinhaPrimeiraApi.DTO;
-using MinhaPrimeiraApi.entity;
+using MinhaPrimeiraApi.Entity;
 using MinhaPrimeiraApi.Infrastructure;
 using MySql.Data.MySqlClient;
 
