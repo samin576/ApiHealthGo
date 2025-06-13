@@ -13,9 +13,9 @@ namespace MinhaPrimeiraApi.Controllers
     public class NacaoController : ControllerBase
     {
         private INacaoService _service;
-        public NacaoController()
+        public NacaoController(INacaoService nacaoService)
         {
-            _service = new NacaoService();
+            _service = nacaoService;
         }
         [HttpGet]
         public async Task<ActionResult<NacaoGetAllResponse>> Get()
