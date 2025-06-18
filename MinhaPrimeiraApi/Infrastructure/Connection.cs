@@ -12,7 +12,7 @@ namespace MinhaPrimeiraApi.Infrastructure
     public class Connection : IConnection
     {
 
-        protected string connectionString = "Server=localhost;Database=HealthGo;User=root;Password=Nade2749";
+        protected string connectionString = "Server=localhost;Database=HealthGo;User=root;Password=1234";
         public MySqlConnection GetConnection()
         {
             return new MySqlConnection(connectionString);
